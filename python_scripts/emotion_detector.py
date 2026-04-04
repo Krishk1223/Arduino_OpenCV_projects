@@ -4,21 +4,23 @@ import mediapipe as mp
 import pathlib
 import math
 import serial
+from serial.tools import list_ports
+import sys
 
 RIGHT_LIP_INDEX = 306
 LEFT_LIP_INDEX = 61
 BAUD_RATE = 9600
 
 def port_checker():
-    ports = serial.tools.list_ports.comports()
+    ports = list_ports.comports()
     for port in ports:
         print(f"Port: {port.device}, Description: {port.description}")
-        if "Arduino" in port.description:
+        if "IOUSBHostDevice" in port.description:
             print(f"Arduino found on port: {port.device}")
             return port.device
-        else:
-            print("Arduino not found. Please check your connections.")
-            return None
+
+    print("Arduino not found. Please check your connections.")
+    return None
 
 
 def main():
@@ -67,12 +69,14 @@ def main():
                     # 140-153 sadness
                     # 160-179 neutral
                      # 190+ happy
-                    if distance > 140 and distance < 155:
+                    if distance < 155:
                         arduino.write(b's') # send 's' for sad
-                    elif distance > 159 and distance < 180:
+                    elif distance > 155 and distance < 180:
                         arduino.write(b'n') # send 'n' for neutral
                     elif distance > 180 and distance < 300:
                         arduino.write(b'h') # send 'h' for happy
+                    else:
+                        arduino.write(b'e') # cannot tell expression (adjust webcam?)
                 
 
             cv2.imshow("Face Detector", frame)
