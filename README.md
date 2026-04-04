@@ -7,4 +7,7 @@ Projects utilising Computer Vision with arduino and OpenCV
 ____
 Files to run:
     - ./python_scripts/emotion_detector.py
-    - ./arduino_sketches/
+    - ./arduino_sketches/emotion_display/emotion_display.ino
+
+[LCD circuit setup - No I2C](https://docs.arduino.cc/learn/electronics/lcd-displays/)
+
